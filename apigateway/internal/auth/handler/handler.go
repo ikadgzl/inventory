@@ -16,7 +16,6 @@ type authHandler struct {
 }
 
 func NewAuthHandler(authSvc auth.AuthServiceClient) AuthHandler {
-
 	return &authHandler{
 		authSvc: authSvc,
 	}

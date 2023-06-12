@@ -8,6 +8,7 @@ import (
 )
 
 type RegisterRequest struct {
+	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
@@ -20,6 +21,7 @@ func (h *authHandler) Register(ctx *gin.Context) {
 	}
 
 	r, err := h.authSvc.Register(ctx, &auth.RegisterRequest{
+		Name:     req.Name,
 		Username: req.Email,
 		Password: req.Password,
 	})
