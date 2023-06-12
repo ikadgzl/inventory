@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "github.com/ikadgzl/inventory/common/proto/auth";
+
+service AuthService {
+  rpc Login(LoginRequest) returns (AuthResponse) {}
+  rpc Register(RegisterRequest) returns (AuthResponse) {}
+  rpc Validate (ValidateRequest) returns (ValidateResponse) {}
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  uint32 status = 1;
+  string error = 2;
+  string token = 3;
+}
+
+message ValidateRequest {
+  string token = 1;
+}
+
+message ValidateResponse {
+  uint32 status = 1;
+  string error = 2;
+  int64 userId = 3;
+}
+
+
+
