@@ -22,8 +22,6 @@ message RegisterRequest {
 }
 
 message AuthResponse {
-  uint32 status = 1;
-  string error = 2;
   string token = 3;
 }
 
@@ -32,8 +30,6 @@ message ValidateRequest {
 }
 
 message ValidateResponse {
-  uint32 status = 1;
-  string error = 2;
   int64 userId = 3;
 }
 
