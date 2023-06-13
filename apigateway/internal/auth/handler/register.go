@@ -15,7 +15,7 @@ type RegisterRequest struct {
 
 func (h *authHandler) Register(ctx *gin.Context) {
 	req := &RegisterRequest{}
-	if err := ctx.Bind(req); err != nil {
+	if err := ctx.BindJSON(req); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

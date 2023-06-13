@@ -16,7 +16,7 @@ func NewConfig() *Config {
 	// TODO: for development.
 	return &Config{
 		Port:       ":8080",
-		AuthSvcUrl: "http://localhost:8081",
-		UserSvcUrl: "http://localhost:8082",
+		AuthSvcUrl: "localhost:8081",
+		UserSvcUrl: "localhost:8082",
 	}
 }
