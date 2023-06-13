@@ -47,7 +47,7 @@ func NewConfig() *Config {
 
 	// TODO: for dev.
 	return &Config{
-		Port: ":8080",
+		Port: ":8081",
 		DB: &DBConfig{
 			Host: "localhost",
 			Port: "5432",

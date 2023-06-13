@@ -6,13 +6,13 @@ import (
 	"github.com/ikadgzl/inventory/common/proto/auth"
 )
 
-type authServer struct {
+type authHandler struct {
 	auth.UnimplementedAuthServiceServer
 	jwtUtil util.JwtUtil
 }
 
-func NewAuthServer(jwtConfig *config.JWTConfig) auth.AuthServiceServer {
-	return &authServer{
+func NewAuthHandler(jwtConfig *config.JWTConfig) auth.AuthServiceServer {
+	return &authHandler{
 		jwtUtil: util.NewJwtUtil(jwtConfig),
 	}
 }

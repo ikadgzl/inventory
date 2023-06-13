@@ -6,6 +6,6 @@ import (
 	"github.com/ikadgzl/inventory/common/proto/auth"
 )
 
-func (a *authServer) Validate(ctx context.Context, req *auth.ValidateRequest) (*auth.ValidateResponse, error) {
+func (a *authHandler) Validate(ctx context.Context, req *auth.ValidateRequest) (*auth.ValidateResponse, error) {
 	return nil, nil
 }

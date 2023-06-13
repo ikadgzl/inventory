@@ -17,13 +17,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
+
+	grpcSrv := grpc.NewServer()
+	authHndl := handler.NewAuthHandler(c.JWT)
+	auth.RegisterAuthServiceServer(grpcSrv, authHndl)
+
 	log.Printf("auth service listening at %v", l.Addr())
-
-	gs := grpc.NewServer()
-	as := handler.NewAuthServer(c.JWT)
-	auth.RegisterAuthServiceServer(gs, as)
-
-	if err := gs.Serve(l); err != nil {
+	if err := grpcSrv.Serve(l); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 }
