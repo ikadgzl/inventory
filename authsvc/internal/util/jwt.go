@@ -9,7 +9,7 @@ import (
 )
 
 type JwtUtil interface {
-	GenerateToken(id uint64) (string, error)
+	GenerateToken(id int64) (string, error)
 	ValidateToken(token string) (*jwtClaims, error)
 }
 
@@ -23,12 +23,13 @@ func NewJwtUtil(jwtConfig *config.JWTConfig) JwtUtil {
 	}
 }
 
+// TODO: change this into uint64
 type jwtClaims struct {
 	*jwt.StandardClaims
-	Id uint64
+	Id int64
 }
 
-func (j *jwtUtil) GenerateToken(id uint64) (string, error) {
+func (j *jwtUtil) GenerateToken(id int64) (string, error) {
 	sClaims := &jwt.StandardClaims{
 		ExpiresAt: j.jwtConfig.ExpiresAt,
 		Issuer:    j.jwtConfig.Issuer,
