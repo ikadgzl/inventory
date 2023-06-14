@@ -8,7 +8,6 @@ import (
 type AuthHandler interface {
 	Login(ctx *gin.Context)
 	Register(ctx *gin.Context)
-	Validate(ctx *gin.Context)
 }
 
 type authHandler struct {

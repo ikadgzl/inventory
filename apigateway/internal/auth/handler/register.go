@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/ikadgzl/inventory/common/cerr"
 	"github.com/ikadgzl/inventory/common/proto/auth"
 )
 
@@ -22,15 +23,14 @@ func (h *authHandler) Register(ctx *gin.Context) {
 
 	r, err := h.authSvc.Register(ctx, &auth.RegisterRequest{
 		Name:     req.Name,
-		Username: req.Email,
+		Email:    req.Email,
 		Password: req.Password,
 	})
-	if err != nil || r.Status != http.StatusOK {
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, r.Error)
+	if err != nil {
+		cerr.HandleGrpcError(ctx, err)
 		return
 	}
 
-	// TODO: correct values
-	ctx.SetCookie("accessToken", r.Token, 3600, "/", "localhost", false, true)
-	ctx.JSON(http.StatusOK, nil)
+	// ctx.SetCookie("accessToken", r.Token, 3600, "/", "localhost", false, true)
+	ctx.JSON(http.StatusOK, r.Token)
 }

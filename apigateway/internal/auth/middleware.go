@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/ikadgzl/inventory/common/cerr"
 	"github.com/ikadgzl/inventory/common/proto/auth"
 )
 
@@ -31,8 +32,8 @@ func (m *authMiddleware) AuthN(ctx *gin.Context) {
 	r, err := m.authSvc.Validate(ctx, &auth.ValidateRequest{
 		Token: token,
 	})
-	if err != nil || r.Status != http.StatusOK {
-		ctx.AbortWithStatus(http.StatusUnauthorized)
+	if err != nil {
+		cerr.HandleGrpcError(ctx, err)
 		return
 	}
 
