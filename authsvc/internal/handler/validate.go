@@ -7,5 +7,12 @@ import (
 )
 
 func (a *authHandler) Validate(ctx context.Context, req *auth.ValidateRequest) (*auth.ValidateResponse, error) {
-	return nil, nil
+	claims, err := a.jwtUtil.ValidateToken(req.Token)
+	if err != nil {
+		return nil, err
+	}
+
+	return &auth.ValidateResponse{
+		UserId: claims.Id,
+	}, nil
 }

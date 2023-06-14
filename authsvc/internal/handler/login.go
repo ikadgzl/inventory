@@ -2,28 +2,40 @@ package handler
 
 import (
 	"context"
+	"errors"
 
+	"github.com/ikadgzl/inventory/authsvc/internal/util"
 	"github.com/ikadgzl/inventory/common/proto/auth"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 func (a *authHandler) Login(ctx context.Context, req *auth.LoginRequest) (*auth.AuthResponse, error) {
-	if req.Username == "" || req.Password == "" {
-		return nil, status.Error(codes.InvalidArgument, "invalid credentials")
+	err := util.ValidateLoginReqest(req)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if req.Username != "admin" || req.Password != "admin" {
-		return nil, status.Error(codes.Unauthenticated, "invalid username or password")
+	au, err := a.repo.FindOne(req.Email)
+	if err != nil {
+		if errors.Is(err, util.ErrUserNotFound) {
+			return nil, util.ErrGrpcInvalidCredentials
+		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	// TODO: implement login logic
-	// 1. check username and password
-	// 2. generate token
-	// 4. return token to client
+	ok := util.CheckPasswordHash(au.Password, req.Password)
+	if !ok {
+		return nil, util.ErrGrpcInvalidCredentials
+	}
+
+	t, err := a.jwtUtil.GenerateToken(au.ID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
 	res := &auth.AuthResponse{
-		Token: "mytoken",
+		Token: t,
 	}
 
 	return res, nil
