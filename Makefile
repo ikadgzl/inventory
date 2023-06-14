@@ -8,3 +8,12 @@ gateway:
 
 authsvc:
 	go run ./authsvc/cmd/main.go
+
+
+DB_URL=postgres://nexus:nexus@localhost:5432/nexus?sslmode=disable
+
+mcreate:
+	migrate create -ext sql -dir ./$(svc)/db/migration -seq $(name)
+
+migrate:
+	migrate -path ./$(svc)/db/migration -database ${DB_URL} up
