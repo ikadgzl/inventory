@@ -5,7 +5,9 @@ import (
 	"net"
 
 	"github.com/ikadgzl/inventory/authsvc/internal/config"
+	"github.com/ikadgzl/inventory/authsvc/internal/db"
 	"github.com/ikadgzl/inventory/authsvc/internal/handler"
+	"github.com/ikadgzl/inventory/authsvc/internal/repository"
 	"github.com/ikadgzl/inventory/common/proto/auth"
 	"google.golang.org/grpc"
 )
@@ -18,8 +20,11 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
+	db := db.NewPostgresDB(c.DB)
+	authRepo := repository.NewAuthRepository(db)
+	authHndl := handler.NewAuthHandler(c.JWT, authRepo)
+
 	grpcSrv := grpc.NewServer()
-	authHndl := handler.NewAuthHandler(c.JWT)
 	auth.RegisterAuthServiceServer(grpcSrv, authHndl)
 
 	log.Printf("auth service listening at %v", l.Addr())
