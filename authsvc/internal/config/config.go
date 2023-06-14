@@ -1,6 +1,10 @@
 package config
 
-import "os"
+import (
+	"database/sql"
+	"fmt"
+	"os"
+)
 
 type DBConfig struct {
 	Host string
@@ -8,6 +12,18 @@ type DBConfig struct {
 	User string
 	Pass string
 	Name string
+}
+
+func (d *DBConfig) ConnectionString() string {
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		d.Host, d.Port, d.User, d.Pass, d.Name)
+}
+
+func (d *DBConfig) Configure(db *sql.DB) {
+	// TODO: what are the optimum values?
+	// db.SetMaxOpenConns(10)
+	// db.SetMaxIdleConns(5)
+	// db.SetConnMaxLifetime(5)
 }
 
 type JWTConfig struct {
@@ -51,9 +67,9 @@ func NewConfig() *Config {
 		DB: &DBConfig{
 			Host: "localhost",
 			Port: "5432",
-			User: "test",
-			Pass: "test",
-			Name: "users",
+			User: "nexus",
+			Pass: "nexus",
+			Name: "nexus",
 		},
 		JWT: &JWTConfig{
 			Secret: "secret",
